@@ -1,21 +1,4 @@
 
-:root {
-  --bg: #f5f7fb;
-  --surface: #ffffff;
-  --sidebar: #111c2d;
-  --text: #172235;
-  --muted: #8290a4;
-  --border: #e8edf4;
-  --primary: #5368e8;
-  --primary-dark: #4054d2;
-  --blue: #4285f4;
-  --purple: #9564e9;
-  --green: #20a879;
-  --orange: #e99b43;
-  --red: #e46d78;
-  --shadow: 0 5px 20px rgba(25, 42, 70, 0.045);
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
