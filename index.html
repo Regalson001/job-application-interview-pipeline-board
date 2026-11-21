@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Track job applications, interviews, offers and follow-ups in one organized Kanban board.">
+  <title>CareerFlow — Job Pipeline Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-icon">C</span>
+        <span>Career<span class="brand-light">Flow</span></span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="side-nav">
+        <a href="#dashboard" class="nav-item active">
+          <span>▦</span> Pipeline Board
+        </a>
+        <a href="#follow-ups" class="nav-item" id="followupNav">
+          <span>◷</span> Follow-ups
+          <span class="nav-count" id="followupCount">0</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-label">PIPELINE STAGES</div>
+      <div class="stage-links">
+        <div><span class="stage-dot applied"></span> Applied</div>
+        <div><span class="stage-dot interviewing"></span> Interviewing</div>
+        <div><span class="stage-dot offer"></span> Offer</div>
+        <div><span class="stage-dot rejected"></span> Rejected</div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip">
+          <span class="tip-icon">✦</span>
+          <strong>Stay organized.</strong>
+          <p>Every application is a step closer to your next opportunity.</p>
+        </div>
+        <div class="profile">
+          <div class="avatar">JD</div>
+          <div>
+            <strong>Job Seeker</strong>
+            <small>Personal workspace</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+
+      <header class="topbar">
+        <div>
+          <div class="breadcrumb">WORKSPACE / <span>JOB PIPELINE</span></div>
+          <h1>Job Application Pipeline</h1>
+          <p class="page-subtitle">Keep every opportunity moving forward.</p>
+        </div>
+
+        <div class="top-actions">
+          <button class="btn btn-secondary" id="importBtn" type="button">
+            <span>↑</span> Import
+          </button>
+          <button class="btn btn-secondary" id="exportBtn" type="button">
+            <span>↓</span> Export JSON
+          </button>
+          <button class="btn btn-primary" id="addJobBtn" type="button">
+            <span>＋</span> Add application
+          </button>
+          <input type="file" id="importFile" accept=".json,application/json" hidden>
+        </div>
+      </header>
+
+      <section class="stats-grid" aria-label="Application statistics">
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Total applications</span>
+            <span class="stat-icon blue">▦</span>
+          </div>
+          <strong id="totalStat">0</strong>
+          <small>All tracked opportunities</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Interviews</span>
+            <span class="stat-icon purple">◉</span>
+          </div>
+          <strong id="interviewStat">0</strong>
+          <small>Active interview processes</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Offers received</span>
+            <span class="stat-icon green">✦</span>
+          </div>
+          <strong id="offerStat">0</strong>
+          <small>Potential opportunities</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Follow-ups due</span>
+            <span class="stat-icon orange">◷</span>
+          </div>
+          <strong id="followupStat">0</strong>
+          <small>Due today or overdue</small>
+        </article>
+      </section>
+
+      <section class="board-toolbar">
+        <div>
+          <h2>Application board</h2>
+          <p>Manage your opportunities from application to outcome.</p>
+        </div>
+
+        <div class="filters">
+          <div class="search-box">
+            <span>⌕</span>
+            <input type="search" id="searchInput" placeholder="Search company or role..." aria-label="Search applications">
+          </div>
+
+          <select id="stageFilter" aria-label="Filter by stage">
+            <option value="all">All stages</option>
+            <option value="Applied">Applied</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+
+          <select id="sortFilter" aria-label="Sort applications">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="company">Company A–Z</option>
+            <option value="followup">Follow-up date</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="kanban-board" aria-label="Job application stages">
+        <div class="kanban-column" data-stage="Applied">
+          <div class="column-heading">
+            <div class="column-title">
+              <span class="stage-dot applied"></span>
+              <h3>Applied</h3>
+              <span class="column-count" id="countApplied">0</span>
+            </div>
+            <button class="column-add" data-add-stage="Applied" aria-label="Add applied application">＋</button>
+          </div>
+          <div class="card-list" id="listApplied"></div>
+          <button class="add-card-btn" data-add-stage="Applied">＋ Add application</button>
+        </div>
+
+        <div class="kanban-column" data-stage="Interviewing">
+          <div class="column-heading">
+            <div class="column-title">
+              <span class="stage-dot interviewing"></span>
+              <h3>Interviewing</h3>
+              <span class="column-count" id="countInterviewing">0</span>
+            </div>
+            <button class="column-add" data-add-stage="Interviewing" aria-label="Add interview application">＋</button>
+          </div>
+          <div class="card-list" id="listInterviewing"></div>
+          <button class="add-card-btn" data-add-stage="Interviewing">＋ Add application</button>
+        </div>
+
+        <div class="kanban-column" data-stage="Offer">
+          <div class="column-heading">
+            <div class="column-title">
+              <span class="stage-dot offer"></span>
+              <h3>Offer</h3>
+              <span class="column-count" id="countOffer">0</span>
+            </div>
+            <button class="column-add" data-add-stage="Offer" aria-label="Add offer application">＋</button>
+          </div>
+          <div class="card-list" id="listOffer"></div>
+          <button class="add-card-btn" data-add-stage="Offer">＋ Add application</button>
+        </div>
+
+        <div class="kanban-column" data-stage="Rejected">
+          <div class="column-heading">
+            <div class="column-title">
+              <span class="stage-dot rejected"></span>
+              <h3>Rejected</h3>
+              <span class="column-count" id="countRejected">0</span>
+            </div>
+            <button class="column-add" data-add-stage="Rejected" aria-label="Add rejected application">＋</button>
+          </div>
+          <div class="card-list" id="listRejected"></div>
+          <button class="add-card-btn" data-add-stage="Rejected">＋ Add application</button>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>CareerFlow © <span id="currentYear"></span></span>
+        <span>Your application data is saved in this browser.</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Add / Edit Application Modal -->
+  <div class="modal-backdrop" id="jobModal" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow">OPPORTUNITY DETAILS</span>
+          <h2 id="modalTitle">Add application</h2>
+          <p>Record a new opportunity in your pipeline.</p>
+        </div>
+        <button class="modal-close" id="closeModal" type="button" aria-label="Close modal">×</button>
+      </div>
+
+      <form id="jobForm">
+        <input type="hidden" id="jobId">
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="company">Company name *</label>
+            <input id="company" name="company" type="text" placeholder="e.g. Google" maxlength="100" required>
+          </div>
+
+          <div class="form-group">
+            <label for="role">Job title *</label>
+            <input id="role" name="role" type="text" placeholder="e.g. Frontend Developer" maxlength="120" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="jobLink">Job posting URL</label>
+            <input id="jobLink" name="jobLink" type="url" placeholder="https://company.com/careers/job">
+          </div>
+
+          <div class="form-group">
+            <label for="appliedDate">Date applied *</label>
+            <input id="appliedDate" name="appliedDate" type="date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="stage">Application stage *</label>
+            <select id="stage" name="stage" required>
+              <option value="Applied">Applied</option>
+              <option value="Interviewing">Interviewing</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="followupDate">Follow-up date</label>
+            <input id="followupDate" name="followupDate" type="date">
+            <small>Optional reminder to contact the employer.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input id="location" name="location" type="text" placeholder="e.g. Remote / Nairobi">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="4" maxlength="2000" placeholder="Recruiter details, interview preparation, salary expectations..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelModal" type="button">Cancel</button>
+          <button class="btn btn-primary" id="saveJobBtn" type="submit">Save application</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
